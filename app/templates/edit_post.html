@@ -1,0 +1,38 @@
+<!-- app/templates/edit_post.html -->
+{% extends "base.html" %}
+{% block title %}Edit Post{% endblock %}
+{% block content %}
+<div class="form-container">
+    <h2 class="mb-4">Edit Post</h2>
+    {% if post.image %}
+    <img src="{{ url_for('blog.serve_image', post_id=post.id) }}" class="img-fluid mb-3 rounded" alt="Current post image" onerror="this.style.display='none';">
+    <p class="text-muted">Current image (uploading a new one will replace it)</p>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}  <!-- This includes the CSRF token -->
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control") }}
+            {% for error in form.title.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.content.label(class="form-label") }}
+            {{ form.content(class="form-control", rows=5) }}
+            {% for error in form.content.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="mb-3">
+            {{ form.image.label(class="form-label") }}
+            {{ form.image(class="form-control") }}
+            {% for error in form.image.errors %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update Post</button>
+        <a href="{{ url_for('blog.view_post', id=post.id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!-- app/templates/profile.html -->
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h2>{{ user.username }}'s Profile</h2>
+        <p>Joined on {{ user.joined_at.strftime('%Y-%m-%d') }}</p>
+    </div>
+
+    <!-- User's Posts -->
+    <h3 class="section-title">Your Posts</h3>
+    {% if user_posts %}
+    {% for post in user_posts %}
+    <div class="card mb-3">
+        {% if post.image %}
+        <img src="{{ url_for('blog.serve_image', post_id=post.id) }}" class="card-img-top" alt="Post image" onerror="this.style.display='none';">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.content|truncate(200) }}</p>
+            <p class="card-text"><small class="text-muted">Posted on {{ post.created_at.strftime('%Y-%m-%d') }}</small></p>
+            <a href="{{ url_for('blog.view_post', id=post.id) }}" class="btn btn-primary">Read More</a>
+            <a href="{{ url_for('blog.edit_post', id=post.id) }}" class="btn btn-warning">Edit</a>
+            <form action="{{ url_for('blog.delete_post', id=post.id) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">You haven't created any posts yet.</p>
+    {% endif %}
+
+    <!-- Favorite Posts -->
+    <h3 class="section-title">Favorite Posts</h3>
+    {% if favorite_posts %}
+    {% for post in favorite_posts %}
+    <div class="card mb-3">
+        {% if post.image %}
+        <img src="{{ url_for('blog.serve_image', post_id=post.id) }}" class="card-img-top" alt="Post image" onerror="this.style.display='none';">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.content|truncate(200) }}</p>
+            <p class="card-text"><small class="text-muted">By {{ post.author.username }} on {{ post.created_at.strftime('%Y-%m-%d') }}</small></p>
+            <a href="{{ url_for('blog.view_post', id=post.id) }}" class="btn btn-primary">Read More</a>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">You haven't favorited any posts yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

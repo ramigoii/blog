@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+env/
+
+# SQLite database
+instance/blog.db
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PyCharm project files
+.idea/
+
+# macOS system files
+.DS_Store
+
+# Temporary files
+*.log
+*.tmp
+*.swp
+
+# Environment variables (if you add one later)
+.env
+
+# Uploaded images (if stored on disk, though yours are in the database)
+app/static/uploads/

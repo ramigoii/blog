@@ -1,0 +1,43 @@
+<!-- app/templates/post.html -->
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<div class="post-container">
+    <div class="row">
+        <!-- Image on the left -->
+        {% if post.image %}
+        <div class="col-md-5">
+            <img src="{{ url_for('blog.serve_image', post_id=post.id) }}" class="post-image" alt="Post image" onerror="this.style.display='none';">
+        </div>
+        {% endif %}
+        <!-- Content on the right -->
+        <div class="{% if post.image %}col-md-7{% else %}col-12{% endif %}">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p class="post-meta">By {{ post.author.username }} on {{ post.created_at.strftime('%Y-%m-%d') }}</p>
+            <div class="post-content">
+                <p>{{ post.content }}</p>
+            </div>
+            <div class="post-actions d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{{ url_for('blog.index') }}" class="btn btn-primary">Back to Home</a>
+                    {% if session.user_id == post.user_id %}
+                    <a href="{{ url_for('blog.edit_post', id=post.id) }}" class="btn btn-warning">Edit</a>
+                    <form action="{{ url_for('blog.delete_post', id=post.id) }}" method="POST" style="display:inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+                {% if session.user_id %}
+                <form action="{{ url_for('blog.toggle_favorite', post_id=post.id) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="favorite-btn {% if is_favorited %}favorited{% endif %}">
+                        <i class="fa-heart fa"></i>
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
