@@ -58,7 +58,7 @@ def create_post():
             image=image_filename,
             image_data=image_data,
             user_id=session['user_id']
-        )<
+        )
         db.session.add(post)
         db.session.commit()
         logging.debug(f"Post created: id={post.id}, image_filename={post.image}")
